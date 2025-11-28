@@ -1,0 +1,25 @@
+# == Build Artifacts ==
+/target/
+/build/
+*.jar
+*.war
+*.ear
+
+# == Maven Wrapper ==
+.mvn/wrapper/maven-wrapper.jar
+
+# == IDEA ==
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# == VS Code ==
+.vscode/
+
+# == Eclipse / STS ==
+.classpath
+.project
+.settings/
+.apt_generated/
+.factorypath
