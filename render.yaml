@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: vehicle
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: SPRING_DATA_MONGODB_URI
+        value: mongodb+srv://testapi0905_db_user:jgHPXKi8eZeee057@testandtry.99i2u3s.mongodb.net/park_karo_db?retryWrites=true&w=majority&tls=true&connectTimeoutMS=30000
+      - key: JAVA_OPTS
+        value: -Xmx512m -Xms256m
+    healthCheckPath: /health
