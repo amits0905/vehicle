@@ -20,7 +20,8 @@ private final RegistrationService userService;
     }
 
     // Endpoint for user registration
-    @PostMapping("/register")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         try {
             User registeredUser = userService.registerUser(user);

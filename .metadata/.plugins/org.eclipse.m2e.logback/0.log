@@ -1,0 +1,4 @@
+2025-12-03 13:03:26,527 [Worker-5: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is not available. Remote download required.
+2025-12-03 13:08:38,850 [Worker-25: https://download.eclipse.org/buildship/updates/e410/releases/3.x/compositeArtifacts.jar] INFO  o.a.h.c.h.i.c.HttpRequestRetryExec - Recoverable I/O exception (java.net.SocketException) caught when processing request to {s}->[https://download.eclipse.org:443]
+2025-12-03 13:08:38,850 [Worker-40: https://download.eclipse.org/mpc/drops/1.12.1/v20250508-2126/artifacts.xml.xz] INFO  o.a.h.c.h.i.c.HttpRequestRetryExec - Recoverable I/O exception (java.net.SocketException) caught when processing request to {s}->[https://download.eclipse.org:443]
+2025-12-03 13:12:41,885 [Worker-6: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.

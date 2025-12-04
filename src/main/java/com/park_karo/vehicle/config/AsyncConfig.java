@@ -10,14 +10,14 @@ import java.util.concurrent.Executor;
 @EnableAsync // Enables Spring's asynchronous processing capability
 public class AsyncConfig {
 
-    @Bean(name = "threadPoolTaskExecutor") // Give the executor a specific name
-    public Executor threadPoolTaskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(5);
-        executor.setMaxPoolSize(10);
-        executor.setQueueCapacity(25);
-        executor.setThreadNamePrefix("Async-Task-");
-        executor.initialize();
-        return executor;
-    }
+	@Bean(name = "threadPoolTaskExecutor") // Give the executor a specific name
+	public Executor threadPoolTaskExecutor() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(5);
+		executor.setMaxPoolSize(10);
+		executor.setQueueCapacity(25);
+		executor.setThreadNamePrefix("Async-Task-");
+		executor.initialize();
+		return executor;
+	}
 }
