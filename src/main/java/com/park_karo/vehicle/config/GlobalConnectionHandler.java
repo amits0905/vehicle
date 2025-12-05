@@ -28,18 +28,18 @@ public class GlobalConnectionHandler implements CommandLineRunner {
 	}
 
 	public void testAllConnections() {
-		logger.info("🚀 =========================================");
+		logger.info("===========================================");
 		logger.info("🚀 Starting Global Connection Test...");
 		logger.info("🚀 Timestamp: {}", new Date());
-		logger.info("🚀 =========================================");
+		logger.info("===========================================");
 
 		testMongoDBConnection();
 		testDatabaseCollections();
 		testDatabaseHealth();
 
-		logger.info("✅ =========================================");
+		logger.info("===========================================");
 		logger.info("✅ Global Connection Test COMPLETE");
-		logger.info("✅ =========================================");
+		logger.info("===========================================");
 	}
 
 	private void testMongoDBConnection() {

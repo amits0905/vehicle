@@ -6,24 +6,23 @@ import java.util.Map;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.park_karo.vehicle.exception.CustomExceptions.ValidationBusinessException;
+
 @Document(collection = "manage_data")
 public class ManageData {
 
 	private final String userId;
 
-	// Sections stored as Map-of-Maps for quick access by ID
 	private final Map<String, Map<String, Object>> vehicles = new HashMap<>();
 	private final Map<String, Map<String, Object>> favoriteSpots = new HashMap<>();
 	private final Map<String, Map<String, Object>> history = new HashMap<>();
 	private final Map<String, Map<String, Object>> activeStatus = new HashMap<>();
 
-	// ---------------------------------------
-	// Constructor 1: only userId
+	// -----------------------
 	public ManageData(String userId) {
 		this.userId = userId;
 	}
 
-	// Constructor 2: userId + lists (for legacy service code)
 	public ManageData(String userId, List<Map<String, Object>> vehiclesList,
 			List<Map<String, Object>> favoriteSpotsList, List<Map<String, Object>> activeStatusList,
 			List<Map<String, Object>> historyList) {
@@ -31,58 +30,71 @@ public class ManageData {
 		this.userId = userId;
 
 		if (vehiclesList != null) {
-			vehiclesList.forEach(v -> vehicles.put(v.get("vehicle_id").toString(), v));
+			vehiclesList.forEach(v -> {
+				if (v.get("vehicle_id") != null) {
+					vehicles.put(v.get("vehicle_id").toString(), v);
+				}
+			});
 		}
 
 		if (favoriteSpotsList != null) {
-			favoriteSpotsList.forEach(s -> favoriteSpots.put(s.get("spot_id").toString(), s));
+			favoriteSpotsList.forEach(s -> {
+				if (s.get("spot_id") != null) {
+					favoriteSpots.put(s.get("spot_id").toString(), s);
+				}
+			});
 		}
 
 		if (activeStatusList != null) {
-			activeStatusList.forEach(a -> activeStatus.put(a.get("active_id").toString(), a));
+			activeStatusList.forEach(a -> {
+				if (a.get("active_id") != null) {
+					activeStatus.put(a.get("active_id").toString(), a);
+				}
+			});
 		}
 
 		if (historyList != null) {
-			historyList.forEach(h -> history.put(h.get("history_id").toString(), h));
+			historyList.forEach(h -> {
+				if (h.get("history_id") != null) {
+					history.put(h.get("history_id").toString(), h);
+				}
+			});
 		}
 	}
 
-	// ---------------------------------------
-	// Getters for Jackson serialization
+	// -----------------------
 	public String getUserId() {
 		return userId;
 	}
 
 	public Map<String, Map<String, Object>> getVehicles() {
-		return vehicles;
+		return new HashMap<>(vehicles); // Return copy for immutability
 	}
 
 	public Map<String, Map<String, Object>> getFavoriteSpots() {
-		return favoriteSpots;
+		return new HashMap<>(favoriteSpots);
 	}
 
 	public Map<String, Map<String, Object>> getHistory() {
-		return history;
+		return new HashMap<>(history);
 	}
 
 	public Map<String, Map<String, Object>> getActiveStatus() {
-		return activeStatus;
+		return new HashMap<>(activeStatus);
 	}
 
-	// ---------------------------------------
-	// Generic helper to get section by name
+	// -----------------------
 	private Map<String, Map<String, Object>> getSection(String section) {
 		return switch (section) {
 		case "vehicles" -> vehicles;
 		case "favoriteSpots" -> favoriteSpots;
 		case "history" -> history;
 		case "activeStatus" -> activeStatus;
-		default -> throw new IllegalArgumentException("Unknown section: " + section);
+		default -> throw new ValidationBusinessException("section", "Unknown section: " + section);
 		};
 	}
 
-	// ---------------------------------------
-	// CRUD operations on sections
+	// -----------------------
 	public void addToSection(String section, Map<String, Object> item) {
 		Map<String, Map<String, Object>> targetSection = getSection(section);
 		String itemId = extractItemId(section, item);
@@ -91,25 +103,47 @@ public class ManageData {
 
 	public void updateInSection(String section, String itemId, Map<String, Object> updatedItem) {
 		Map<String, Map<String, Object>> targetSection = getSection(section);
-		if (targetSection.containsKey(itemId)) {
-			targetSection.put(itemId, updatedItem);
+		if (!targetSection.containsKey(itemId)) {
+			throw new ValidationBusinessException("itemId",
+					String.format("%s with ID %s not found in section %s", getItemType(section), itemId, section));
 		}
+		targetSection.put(itemId, updatedItem);
 	}
 
 	public void deleteFromSection(String section, String itemId) {
 		Map<String, Map<String, Object>> targetSection = getSection(section);
+		if (!targetSection.containsKey(itemId)) {
+			throw new ValidationBusinessException("itemId",
+					String.format("%s with ID %s not found in section %s", getItemType(section), itemId, section));
+		}
 		targetSection.remove(itemId);
 	}
 
-	// ---------------------------------------
-	// Helper to extract ID depending on section
+	// -----------------------
 	private String extractItemId(String section, Map<String, Object> item) {
+		Object itemId = switch (section) {
+		case "vehicles" -> item.get("vehicle_id");
+		case "favoriteSpots" -> item.get("spot_id");
+		case "history" -> item.get("history_id");
+		case "activeStatus" -> item.get("active_id");
+		default -> throw new ValidationBusinessException("section", "Unknown section: " + section);
+		};
+
+		if (itemId == null) {
+			throw new ValidationBusinessException(getItemType(section) + "_id",
+					String.format("%s ID is required", getItemType(section)));
+		}
+
+		return itemId.toString();
+	}
+
+	private String getItemType(String section) {
 		return switch (section) {
-		case "vehicles" -> item.get("vehicle_id").toString();
-		case "favoriteSpots" -> item.get("spot_id").toString();
-		case "history" -> item.get("history_id").toString();
-		case "activeStatus" -> item.get("active_id").toString();
-		default -> throw new IllegalArgumentException("Unknown section: " + section);
+		case "vehicles" -> "Vehicle";
+		case "favoriteSpots" -> "Favorite spot";
+		case "history" -> "History item";
+		case "activeStatus" -> "Active status";
+		default -> "Item";
 		};
 	}
 }

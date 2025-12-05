@@ -41,6 +41,19 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+<dependency>
+    <groupId>jakarta.validation</groupId>
+    <artifactId>jakarta.validation-api</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-actuator</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-actuator-autoconfigure</artifactId>
+</dependency>
 
 
         <dependency>
@@ -82,7 +95,7 @@
 
     <build>
     <plugins>
-        <!-- Compiler plugin with Lombok annotation processing -->
+			<!-- Compiler plugin with Lombok annotation processing -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
@@ -99,7 +112,7 @@
             </configuration>
         </plugin>
 
-        <!-- Spring Boot Maven plugin -->
+			<!-- Spring Boot Maven plugin -->
         <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>

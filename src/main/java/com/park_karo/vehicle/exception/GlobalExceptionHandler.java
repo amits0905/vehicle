@@ -1,6 +1,6 @@
 package com.park_karo.vehicle.exception;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
 			errors.put(fieldName, message);
 		});
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.BAD_REQUEST.value()).error("Validation Failed").message("Request validation failed")
 				.errors(errors).path(getRequestPath(request)).build();
 
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex,
 			WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.BAD_REQUEST.value()).error("Bad Request").message(ex.getMessage())
 				.path(getRequestPath(request)).build();
 
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleValidationBusinessException(
 			CustomExceptions.ValidationBusinessException ex, WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.BAD_REQUEST.value()).error("Validation Error").message(ex.getMessage())
 				.path(getRequestPath(request)).build();
 
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException ex,
 			WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.NOT_FOUND.value()).error("Endpoint Not Found")
 				.message(String.format("Endpoint %s %s not found", ex.getHttpMethod(), ex.getRequestURL()))
 				.path(getRequestPath(request)).build();
@@ -89,7 +89,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleResourceNotFoundException(
 			CustomExceptions.ResourceNotFoundBusinessException ex, WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.NOT_FOUND.value()).error("Resource Not Found").message(ex.getMessage())
 				.path(getRequestPath(request)).build();
 
@@ -103,7 +103,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleResourceAlreadyExistsException(
 			CustomExceptions.ResourceAlreadyExistsBusinessException ex, WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.CONFLICT.value()).error("Resource Already Exists").message(ex.getMessage())
 				.path(getRequestPath(request)).build();
 
@@ -115,7 +115,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
 			WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.CONFLICT.value()).error("Data Integrity Violation")
 				.message("Data integrity constraint violated").path(getRequestPath(request)).build();
 
@@ -129,7 +129,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleOperationNotPermittedException(
 			CustomExceptions.OperationNotPermittedBusinessException ex, WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.FORBIDDEN.value()).error("Operation Not Permitted").message(ex.getMessage())
 				.path(getRequestPath(request)).build();
 
@@ -143,7 +143,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleRateLimitExceededException(
 			CustomExceptions.RateLimitExceededBusinessException ex, WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.TOO_MANY_REQUESTS.value()).error("Rate Limit Exceeded").message(ex.getMessage())
 				.path(getRequestPath(request)).build();
 
@@ -158,7 +158,7 @@ public class GlobalExceptionHandler {
 
 		String rootCause = ex.getMostSpecificCause().getMessage();
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).error("Database Error")
 				.message("A database error occurred: " + rootCause).path(getRequestPath(request)).build();
 
@@ -170,7 +170,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiErrorResponse> handleDatabaseConnectionException(
 			CustomExceptions.DatabaseConnectionBusinessException ex, WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.SERVICE_UNAVAILABLE.value()).error("Database Connection Error")
 				.message(ex.getMessage()).path(getRequestPath(request)).build();
 
@@ -183,7 +183,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ApiErrorResponse> handleRuntimeException(RuntimeException ex, WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).error("Internal Server Error")
 				.message("An unexpected error occurred: " + ex.getMessage()).path(getRequestPath(request)).build();
 
@@ -194,7 +194,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex, WebRequest request) {
 
-		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(LocalDateTime.now())
+		ApiErrorResponse errorResponse = ApiErrorResponse.builder().timestamp(OffsetDateTime.now())
 				.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).error("Internal Server Error")
 				.message("An unexpected error occurred").path(getRequestPath(request)).build();
 

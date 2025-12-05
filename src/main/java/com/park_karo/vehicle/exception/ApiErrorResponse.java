@@ -1,6 +1,6 @@
 package com.park_karo.vehicle.exception;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({ "timestamp", "status", "error", "message", "path", "errors", "errorId", "debug" })
 public class ApiErrorResponse {
 
-	private LocalDateTime timestamp;
+	private OffsetDateTime timestamp;
 	private int status;
 	private String error;
 	private String message;
@@ -32,7 +32,7 @@ public class ApiErrorResponse {
 	}
 
 	// ------------------- Getters -------------------
-	public LocalDateTime getTimestamp() {
+	public OffsetDateTime getTimestamp() {
 		return timestamp;
 	}
 
@@ -70,7 +70,7 @@ public class ApiErrorResponse {
 	}
 
 	public static class Builder {
-		private LocalDateTime timestamp = LocalDateTime.now();
+		private OffsetDateTime timestamp = OffsetDateTime.now();
 		private int status;
 		private String error;
 		private String message;
@@ -79,7 +79,7 @@ public class ApiErrorResponse {
 		private String errorId;
 		private String debug;
 
-		public Builder timestamp(LocalDateTime timestamp) {
+		public Builder timestamp(OffsetDateTime timestamp) {
 			this.timestamp = timestamp;
 			return this;
 		}
